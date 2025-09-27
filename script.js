@@ -134,7 +134,7 @@ if (contactForm) {
         formStatus.innerHTML = '<p class="sending">Sending message...</p>';
         formStatus.style.display = 'block';
 
-        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'http://yourdomain.com';
+        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://35.239.142.55:5000';
 
         try {
             const res = await fetch(`${API_URL}/api/contact`, {
