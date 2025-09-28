@@ -6,15 +6,28 @@ const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const path = require('path');
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const HTTPS_PORT = process.env.HTTPS_PORT || 443;
 
 // Middleware
 app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
 app.use(express.json());
 app.use('/images', express.static(path.join(__dirname, '../images')));
 app.use(express.static(path.join(__dirname, '..')));
+
+// Redirect HTTP to HTTPS in production
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !== 'https') {
+    res.redirect(`https://${req.header('host')}${req.url}`);
+  } else {
+    next();
+  }
+});
 
 // Root route
 app.get('/', (req, res) => {
@@ -30,8 +43,13 @@ app.post('/api/contact', async (req, res) => {
       return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
-    // Try multiple Gmail configurations
-    const transporter = nodemailer.createTransport({
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid email address' });
+    }
+
+    const transporter = nodemailer.createTransporter({
       service: 'gmail',
       host: 'smtp.gmail.com',
       port: 465,
@@ -41,18 +59,6 @@ app.post('/api/contact', async (req, res) => {
         pass: process.env.EMAIL_PASS,
       },
     });
-
-    // Alternative configuration if the above fails
-    // const transporter = nodemailer.createTransport({
-    //   service: 'gmail',
-    //   host: 'smtp.gmail.com',
-    //   port: 465,
-    //   secure: true,
-    //   auth: {
-    //     user: process.env.EMAIL_USER,
-    //     pass: process.env.EMAIL_PASS,
-    //   },
-    // });
 
     console.log('Attempting to verify SMTP connection...');
     await transporter.verify();
@@ -69,6 +75,8 @@ app.post('/api/contact', async (req, res) => {
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Subject:</strong> ${subject}</p>
         <p><strong>Message:</strong> ${message}</p>
+        <hr>
+        <p><em>Sent from sachitasigdel.com.np</em></p>
       `
     };
 
@@ -80,13 +88,10 @@ app.post('/api/contact', async (req, res) => {
   } catch (error) {
     console.error('Error in /api/contact:', error);
 
-    // Send detailed error info for debugging
     res.status(500).json({ 
       success: false, 
       message: 'Failed to send message', 
-      error: error.message || error.toString(),
-      code: error.code,
-      command: error.command
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
   }
 });
@@ -101,7 +106,7 @@ app.get('/api/projects', (req, res) => {
       category: "web",
       tags: ["HTML/CSS", "JavaScript", "PHP"],
       imageUrl: "/images/projects/ecommerce.jpg",
-      liveUrl: "https://yourdomain.com/ecommerce",
+      liveUrl: "https://sachitasigdel.com.np/ecommerce",
       githubUrl: "https://github.com/Sachita92/Ecommerce-website"
     },
     {
@@ -111,8 +116,8 @@ app.get('/api/projects', (req, res) => {
       category: "app",
       tags: ["React Native", "Firebase"],
       imageUrl: "/images/projects/taskmanager.jpg",
-      liveUrl: "https://expo.dev/@yourusername/taskmanager",
-      githubUrl: "https://github.com/yourusername/taskmanager"
+      liveUrl: "https://expo.dev/@sachita/taskmanager",
+      githubUrl: "https://github.com/Sachita98/taskmanager"
     },
     {
       id: 3,
@@ -121,15 +126,53 @@ app.get('/api/projects', (req, res) => {
       category: "ai",
       tags: ["Python", "NLP", "TensorFlow"],
       imageUrl: "/images/projects/aichatbot.jpg",
-      liveUrl: "https://huggingface.co/spaces/yourusername/chatbot",
-      githubUrl: "https://github.com/yourusername/ai-chatbot"
+      liveUrl: "https://huggingface.co/spaces/sachita/chatbot",
+      githubUrl: "https://github.com/Sachita98/ai-chatbot"
     }
   ];
   res.json(projects);
 });
 
-// Start server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`Email configured for: ${process.env.EMAIL_USER}`);
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
+
+// Start servers
+if (process.env.NODE_ENV === 'production') {
+  // Production: HTTPS server
+  try {
+    const options = {
+      key: fs.readFileSync('/etc/ssl/private/sachitasigdel.com.np.key'),
+      cert: fs.readFileSync('/etc/ssl/certs/sachitasigdel.com.np.pem')
+    };
+
+    https.createServer(options, app).listen(HTTPS_PORT, '0.0.0.0', () => {
+      console.log(`🚀 HTTPS Server running on port ${HTTPS_PORT}`);
+      console.log(`Email configured for: ${process.env.EMAIL_USER}`);
+    });
+
+    // Also start HTTP server for redirects
+    http.createServer((req, res) => {
+      res.writeHead(301, { Location: `https://${req.headers.host}${req.url}` });
+      res.end();
+    }).listen(80, '0.0.0.0', () => {
+      console.log('🔄 HTTP redirect server running on port 80');
+    });
+
+  } catch (error) {
+    console.error('❌ Failed to start HTTPS server:', error.message);
+    console.log('🔄 Falling back to HTTP server...');
+    
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 HTTP Server running on port ${PORT}`);
+      console.log(`Email configured for: ${process.env.EMAIL_USER}`);
+    });
+  }
+} else {
+  // Development: HTTP server
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Development server running on port ${PORT}`);
+    console.log(`Email configured for: ${process.env.EMAIL_USER}`);
+  });
+}

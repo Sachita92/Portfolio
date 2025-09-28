@@ -113,59 +113,106 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Contact Form Submission
-   const contactForm = document.querySelector('#contactForm');
-const formStatus = document.getElementById('formStatus');
+    const contactForm = document.querySelector('#contactForm');
+    const formStatus = document.getElementById('formStatus');
 
-if (contactForm) {
-    contactForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const subject = document.getElementById('subject').value.trim();
-        const message = document.getElementById('message').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
 
-        if (!name || !email || !subject || !message) {
-            formStatus.innerHTML = '<p class="error">Please fill in all fields.</p>';
-            formStatus.style.display = 'block';
-            return;
-        }
-
-        formStatus.innerHTML = '<p class="sending">Sending message...</p>';
-        formStatus.style.display = 'block';
-
-        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://35.239.142.55:5000';
-
-        try {
-            const res = await fetch(`${API_URL}/api/contact`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, subject, message })
-            });
-
-            if (!res.ok) {
-                // If response status is not 2xx, show full error text
-                const errorText = await res.text();
-                formStatus.innerHTML = `<p class="error">Server Error: ${res.status} - ${errorText}</p>`;
+            if (!name || !email || !subject || !message) {
+                showFormMessage('Please fill in all fields.', 'error');
                 return;
             }
 
-            const data = await res.json();
-
-            if (data.success) {
-                formStatus.innerHTML = '<p class="success">Message sent successfully!</p>';
-                contactForm.reset();
-            } else {
-                formStatus.innerHTML = `<p class="error">Error: ${data.message}<br>${data.error || ''}</p>`;
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showFormMessage('Please enter a valid email address.', 'error');
+                return;
             }
 
-        } catch (err) {
-            console.error(err);
-            formStatus.innerHTML = `<p class="error">Failed to send message. ${err.message}</p>`;
+            showFormMessage('Sending message...', 'sending');
+
+            // Temporary hardcoded URL for local testing
+            const API_URL = 'http://localhost:5000';
+            
+            console.log('Current hostname:', window.location.hostname);
+            console.log('API_URL:', API_URL);
+            console.log('Full URL:', `${API_URL}/api/contact`);
+
+            try {
+                const contactURL = `${API_URL}/api/contact`;
+                console.log('About to fetch:', contactURL);
+                
+                const res = await fetch(contactURL, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, subject, message })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    showFormMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
+                    contactForm.reset();
+                } else {
+                    showFormMessage(data.message || 'Failed to send message. Please try again.', 'error');
+                }
+
+            } catch (err) {
+                console.error('Contact form error:', err);
+                showFormMessage('Network error. Please check your connection and try again.', 'error');
+            }
+        });
+    }
+
+    function showFormMessage(message, type) {
+        if (formStatus) {
+            formStatus.innerHTML = `<p class="${type}">${message}</p>`;
+            formStatus.style.display = 'block';
+            
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    formStatus.style.display = 'none';
+                }, 5000);
+            }
         }
+    }
 
-        setTimeout(() => formStatus.style.display = 'none', 10000); // show longer for debugging
-    });
-}
+    // Add scroll-based navigation highlighting
+    function updateActiveNavLink() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+        
+        let currentSection = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            if (window.scrollY >= sectionTop) {
+                currentSection = section.getAttribute('id');
+            }
+        });
 
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${currentSection}`) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', updateActiveNavLink);
+    
+    // Initialize active nav link on page load
+    updateActiveNavLink();
 });
