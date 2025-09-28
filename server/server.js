@@ -6,18 +6,14 @@ const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const path = require('path');
-const https = require('https');
-const http = require('http');
-const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const HTTPS_PORT = process.env.HTTPS_PORT || 443;
 
 // Middleware
 app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
 app.use(express.json());
-app.use('/images', express.static(path.join(__dirname, '../images')));
+// app.use('/images', express.static(path.join(__dirname, '../images')));
 app.use(express.static(path.join(__dirname, '..')));
 
 // Redirect HTTP to HTTPS in production
@@ -172,7 +168,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   // Development: HTTP server
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Development server running on port ${PORT}`);
+    console.log(`🚀Server running on port ${PORT}`);
     console.log(`Email configured for: ${process.env.EMAIL_USER}`);
   });
 }
