@@ -113,7 +113,7 @@ app.get('/api/projects', (req, res) => {
       tags: ["React Native", "Firebase"],
       imageUrl: "/images/projects/taskmanager.jpg",
       liveUrl: "https://expo.dev/@sachita/taskmanager",
-      githubUrl: "https://github.com/Sachita98/taskmanager"
+      githubUrl: "https://github.com/Sachita92/taskmanager"
     },
     {
       id: 3,
@@ -123,7 +123,7 @@ app.get('/api/projects', (req, res) => {
       tags: ["Python", "NLP", "TensorFlow"],
       imageUrl: "/images/projects/aichatbot.jpg",
       liveUrl: "https://huggingface.co/spaces/sachita/chatbot",
-      githubUrl: "https://github.com/Sachita98/ai-chatbot"
+      githubUrl: "https://github.com/Sachita92/ai-chatbot"
     }
   ];
   res.json(projects);

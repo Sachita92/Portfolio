@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Me - Sachita Sigdel</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -32,108 +36,92 @@
         </div>
     </header>
 
-    <section class="contact-page">
+    <section id="contact" class="contact reveal">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Get In Touch</span>
-                <h2>Contact Me</h2>
-                <p class="contact-intro">Have a project in mind or want to discuss potential opportunities? I'd love to hear from you!</p>
+                <span class="section-subtitle">Contact Me</span>
+                <h2>Get In Touch</h2>
             </div>
-            
             <div class="contact-content">
                 <div class="contact-info">
-                    <div class="contact-card">
+                    <div class="contact-card reveal">
                         <i class="fas fa-envelope"></i>
                         <h3>Email</h3>
-                        <p>sachitasigdel0713@example.com</p>
-                        <a href="mailto:sachitasigdel0713@example.com">Write Me</a>
+                        <p>sachitasigdel0713@gmail.com</p>
+                        <a href="mailto:sachitasigdel0713@gmail.com">Write Me</a>
                     </div>
-                    <div class="contact-card">
+                    <div class="contact-card reveal">
                         <i class="fas fa-map-marker-alt"></i>
                         <h3>Location</h3>
                         <p>Remote</p>
-                        <a href="#">View on Map</a>
                     </div>
-                    <div class="contact-card">
+                    <div class="contact-card reveal">
                         <i class="fas fa-phone-alt"></i>
                         <h3>Phone</h3>
-                        <p>+977 123 456 789</p>
-                        <a href="tel:+977123456789">Call Me</a>
-                    </div>
-                    
-                    <div class="social-connect">
-                        <h3>Connect With Me</h3>
-                        <div class="social-icons">
-                            <a href="https://github.com/Sachita98" target="_blank"><i class="fab fa-github"></i></a>
-                            <a href="https://www.linkedin.com/in/sachita-sigdel-aaab14338/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://x.com/Sach_0713" target="_blank"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.instagram.com/sachitaa_/" target="_blank"><i class="fab fa-instagram"></i></a>
-                        </div>
+                        <p>+977 9846964496</p>
+                        <a href="tel:+9779846964496">Call Me</a>
                     </div>
                 </div>
-                
-                <div class="contact-form-container">
-                    <h3>Send Me a Message</h3>
+                <div class="contact-form reveal">
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" id="name" name="name" placeholder="Your Name">
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="Your Email">
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
                         </div>
                         <div class="form-group">
                             <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" placeholder="Subject">
+                            <input type="text" id="subject" name="subject" placeholder="Subject" required>
                         </div>
                         <div class="form-group">
                             <label for="message">Message</label>
-                            <textarea id="message" rows="6" placeholder="Your Message"></textarea>
+                            <textarea id="message" name="message" rows="6" placeholder="Your Message"
+                                required></textarea>
                         </div>
                         <button type="submit" class="btn primary-btn">Send Message</button>
                     </form>
-                    
-                    <!-- Add this right after the form so we can show status messages -->
-                    <div id="formStatus" style="margin-top:10px; display:none;"></div>                    
+                    <div id="formStatus" class="form-status"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h3>Sachita<span>.</span></h3>
-                    <p>Creating digital solutions that make a difference.</p>
-                </div>
-                <div class="footer-links">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="index.html#home">Home</a></li>
-                        <li><a href="index.html#about">About</a></li>
-                        <li><a href="index.html#services">Services</a></li>
-                        <li><a href="index.html#projects">Projects</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-social">
-                    <h3>Connect With Me</h3>
-                    <div class="social-icons">
-                        <a href="https://github.com/Sachita98" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="https://www.linkedin.com/in/sachita-sigdel-aaab14338/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://x.com/Sach_0713" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://www.instagram.com/sachitaa_/" target="_blank"><i class="fab fa-instagram"></i></a>
-                    </div>
+     <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <h2>Sachita<span>.</span></h2>
+                <p>Creating digital solutions that make a difference.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#services">Services</a></li>
+                    <li><a href="index.html#projects">Projects</a></li>
+                    <li><a href="index.html#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h3>Connect With Me</h3>
+                <div class="social-icons">
+                    <a href="https://github.com/Sachita92" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/sachita-sigdel-aaab14338/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://x.com/Sach_0713" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/sachitaa_/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 Sachita Sigdel. All rights reserved.</p>
-            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Sachita Sigdel. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="script.js"></script>
 </body>
+
 </html>
