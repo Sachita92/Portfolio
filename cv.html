@@ -6,153 +6,159 @@
     <title>Sachita Sigdel - CV</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            margin: 0;
             padding: 20px;
-            color: #333;
+            background-color: #f0f0f0;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
+        
+        .container {
+            max-width: 8.5in;
+            background-color: white;
+            margin: 0 auto;
+            padding: 50px 45px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+        
         h1 {
-            color: #5e3bee;
-            margin-bottom: 5px;
+            text-align: center;
+            margin: 0 0 5px 0;
+            font-size: 28px;
         }
-        .contact-info {
-            margin-bottom: 10px;
-            font-size: 0.9em;
+        
+        .contact {
+            text-align: center;
+            font-size: 12px;
+            margin-bottom: 30px;
+            line-height: 1.8;
         }
+        
+        .contact a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        
         .section {
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
-        h2 {
-            color: #5e3bee;
-            border-bottom: 2px solid #5e3bee;
+        
+        .section-title {
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #000;
+            margin-bottom: 12px;
             padding-bottom: 5px;
+        }
+        
+        .item {
             margin-bottom: 15px;
         }
-        .item {
-            margin-bottom: 20px;
-        }
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
+        
         .item-title {
             font-weight: bold;
+            font-size: 12px;
         }
+        
         .item-date {
-            color: #666;
+            font-style: italic;
+            color: #555;
+            font-size: 11px;
+            margin-bottom: 4px;
         }
+        
+        .item-text {
+            font-size: 11px;
+            color: #333;
+            line-height: 1.6;
+        }
+        
         .skills-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            font-size: 11px;
+            line-height: 1.8;
         }
-        .skill {
-            background-color: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.9em;
+        
+        .summary-text {
+            font-size: 11px;
+            line-height: 1.6;
+            color: #333;
         }
     </style>
 </head>
 <body>
-    <div class="header">
+    <div class="container">
         <h1>Sachita Sigdel</h1>
-        <div class="contact-info">
-            <p>Nepal | +977 123 456 789 | sachita@example.com</p>
-            <p>
-                <a href="https://github.com/Sachita98">GitHub</a> |
-                <a href="https://www.linkedin.com/in/sachita-sigdel-aaab14338/">LinkedIn</a> |
-                <a href="https://www.instagram.com/sachitaa_/">Instagram</a>
-            </p>
+        
+        <div class="contact">
+            Remote | +977 9846964496 | sachitasigdel0713@gmail.com<br>
+            <a href="https://github.com/Sachita92">GitHub</a> | 
+            <a href="https://www.linkedin.com/in/sachita-sigdel-aaab14338/">LinkedIn</a> | 
+            <a href="https://www.instagram.com/sachitaa_/">Instagram</a>
         </div>
-    </div>
-
-    <div class="section">
-        <h2>Summary</h2>
-        <p>Recent Diploma in IT graduate with a strong foundation in programming, databases, and server management. Currently sharpening skills in Python, PHP, MySQL, and AI/ML fundamentals while actively building projects and contributing on GitHub.</p>
-    </div>
-
-    <div class="section">
-        <h2>Education</h2>
-        <div class="item">
-            <div class="item-header">
-                <span class="item-title">Diploma in Information Technology</span>
-                <span class="item-date">2020 - 2023</span>
+        
+        <div class="section">
+            <div class="section-title">Summary</div>
+            <div class="summary-text">
+                Recent Diploma in IT graduate with a strong foundation in programming, databases, and server management. Currently sharpening skills in Python, PHP, MySQL, and AI/ML fundamentals while actively building projects and contributing on GitHub.
             </div>
-            <p>College Name, Location</p>
-            <p>Relevant coursework: Programming, Database Management, Web Development, Server Administration</p>
         </div>
-    </div>
-
-    <div class="section">
-        <h2>Skills</h2>
-        <div class="skills-list">
-            <span class="skill">Python (85%)</span>
-            <span class="skill">PHP (75%)</span>
-            <span class="skill">JavaScript (80%)</span>
-            <span class="skill">HTML/CSS (90%)</span>
-            <span class="skill">React (70%)</span>
-            <span class="skill">MySQL (85%)</span>
-            <span class="skill">Git</span>
-            <span class="skill">AI/ML Fundamentals</span>
-            <span class="skill">Problem Solving</span>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Projects</h2>
-        <div class="item">
-            <div class="item-header">
-                <span class="item-title">E-commerce Platform</span>
-                <span class="item-date">2023</span>
+        
+        <div class="section">
+            <div class="section-title">Education</div>
+            <div class="item">
+                <div class="item-title">Diploma in Information Technology</div>
+                <div class="item-date">2020 - 2023</div>
+                <div class="item-text">Relevant coursework: Programming, Database Management, Web Development, Server Administration</div>
             </div>
-            <p>A fully responsive e-commerce website with product management and payment integration.</p>
-            <p>Technologies: HTML/CSS, JavaScript, PHP</p>
         </div>
-        <div class="item">
-            <div class="item-header">
-                <span class="item-title">Task Manager App</span>
-                <span class="item-date">2022</span>
+        
+        <div class="section">
+            <div class="section-title">Skills</div>
+            <div class="skills-list">
+                Python (85%) | PHP (75%) | JavaScript (80%) | HTML/CSS (90%) | React (70%)<br><br>
+                MySQL (85%) | Git | AI/ML Fundamentals | Problem Solving
             </div>
-            <p>A mobile application for managing daily tasks with reminder notifications.</p>
-            <p>Technologies: React Native, Firebase</p>
         </div>
-        <div class="item">
-            <div class="item-header">
-                <span class="item-title">AI Customer Support Chatbot</span>
-                <span class="item-date">2023</span>
+        
+        <div class="section">
+            <div class="section-title">Projects</div>
+            <div class="item">
+                <div class="item-title">E-commerce Platform</div>
+                <div class="item-date">2023</div>
+                <div class="item-text">A fully responsive e-commerce website with product management and payment integration.<br>
+                <strong>Technologies:</strong> HTML/CSS, JavaScript, PHP</div>
             </div>
-            <p>An intelligent chatbot that handles customer inquiries using natural language processing.</p>
-            <p>Technologies: Python, NLP, TensorFlow</p>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Experience</h2>
-        <div class="item">
-            <div class="item-header">
-                <span class="item-title">Freelance Web Developer</span>
-                <span class="item-date">2021 - Present</span>
+            
+            <div class="item">
+                <div class="item-title">Task Manager App</div>
+                <div class="item-date">2022</div>
+                <div class="item-text">A mobile application for managing daily tasks with reminder notifications.<br>
+                <strong>Technologies:</strong> React Native, Firebase</div>
             </div>
-            <p>Developing responsive websites and web applications for various clients.</p>
-            <ul>
-                <li>Created custom websites for small businesses</li>
-                <li>Implemented e-commerce solutions</li>
-                <li>Provided ongoing maintenance and support</li>
-            </ul>
+            
+            <div class="item">
+                <div class="item-title">AI Customer Support Chatbot</div>
+                <div class="item-date">2023</div>
+                <div class="item-text">An intelligent chatbot that handles customer inquiries using natural language processing.<br>
+                <strong>Technologies:</strong> Python, NLP, TensorFlow</div>
+            </div>
         </div>
-    </div>
-
-    <div class="section">
-        <h2>Languages</h2>
-        <p>English (Fluent), Nepali (Native)</p>
+        
+        <div class="section">
+            <div class="section-title">Experience</div>
+            <div class="item">
+                <div class="item-title">Freelance Web Developer</div>
+                <div class="item-date">2021 - Present</div>
+                <div class="item-text">
+                    Developing responsive websites and web applications for various clients. Created custom websites for small businesses, implemented e-commerce solutions, and provided ongoing maintenance and support.
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Languages</div>
+            <div class="item-text">English (Fluent)</div>
+        </div>
     </div>
 </body>
 </html>
