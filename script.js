@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showFormMessage('Sending message...', 'sending');
 
             // Temporary hardcoded URL for local testing
-            const API_URL = 'http://localhost:5000';
+            const API_URL = window.location.origin;
             
             console.log('Current hostname:', window.location.hostname);
             console.log('API_URL:', API_URL);
