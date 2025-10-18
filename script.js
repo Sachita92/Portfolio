@@ -150,12 +150,12 @@ if (backToTop) {
     });
 }
 
-// Contact form handling
+// Contact form handling - FIXED VERSION
 const contactForm = document.getElementById('contactForm');
 const formStatus = document.getElementById('formStatus');
 
 if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         // Get form data
@@ -172,39 +172,46 @@ if (contactForm) {
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
         
-        // Simulate form submission (replace with actual API call)
-        setTimeout(() => {
-            // Success
-            formStatus.textContent = 'Thank you! Your message has been sent successfully. I will get back to you soon!';
-            formStatus.className = 'form-status show success';
-            contactForm.reset();
+        try {
+            // Send to backend API
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
             
-            // Reset button
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
+            const result = await response.json();
             
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-                formStatus.classList.remove('show');
-            }, 5000);
-        }, 1500);
-        
-        // For actual implementation, use EmailJS or your backend API:
-        /*
-        emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", formData)
-            .then(function(response) {
-                formStatus.textContent = 'Thank you! Your message has been sent successfully.';
+            if (response.ok && result.success) {
+                // Success
+                formStatus.textContent = 'Thank you! Your message has been sent successfully. I will get back to you soon!';
                 formStatus.className = 'form-status show success';
                 contactForm.reset();
+                
+                // Reset button
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-            }, function(error) {
-                formStatus.textContent = 'Oops! Something went wrong. Please try again.';
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    formStatus.classList.remove('show');
+                }, 5000);
+            } else {
+                // Error from server
+                formStatus.textContent = result.message || 'Failed to send message. Please try again.';
                 formStatus.className = 'form-status show error';
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-            });
-        */
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+            formStatus.textContent = 'Oops! Something went wrong. Please try again.';
+            formStatus.className = 'form-status show error';
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
     });
 }
 
