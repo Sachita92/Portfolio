@@ -160,47 +160,12 @@ app.get('/health', (req, res) => {
 });
 
 // Start server
-if (process.env.NODE_ENV === 'production') {
-  // Production: HTTPS server
-  try {
-    const https = require('https');
-    const http = require('http');
-    const fs = require('fs');
-    
-    const options = {
-      key: fs.readFileSync('/etc/ssl/private/sachitasigdel.com.np.key'),
-      cert: fs.readFileSync('/etc/ssl/certs/sachitasigdel.com.np.pem')
-    };
-
-    const HTTPS_PORT = process.env.HTTPS_PORT || 443;
-
-    https.createServer(options, app).listen(HTTPS_PORT, '0.0.0.0', () => {
-      console.log(`🚀 HTTPS Server running on port ${HTTPS_PORT}`);
-      console.log(`Email configured for: ${process.env.EMAIL_USER}`);
-    });
-
-    // Also start HTTP server for redirects
-    http.createServer((req, res) => {
-      res.writeHead(301, { Location: `https://${req.headers.host}${req.url}` });
-      res.end();
-    }).listen(80, '0.0.0.0', () => {
-      console.log('🔄 HTTP redirect server running on port 80');
-    });
-
-  } catch (error) {
-    console.error('❌ Failed to start HTTPS server:', error.message);
-    console.log('🔄 Falling back to HTTP server...');
-    
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀 HTTP Server running on port ${PORT}`);
-      console.log(`Email configured for: ${process.env.EMAIL_USER}`);
-    });
-  }
-} else {
-  // Development: HTTP server
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀Server running on port ${PORT}`);
-    console.log(`Email configured for: ${process.env.EMAIL_USER}`);
-  });
-}
+// For production with reverse proxy (nginx), just listen on PORT
+// The reverse proxy handles SSL termination
+app.listen(PORT, '0.0.0.0', () => {
+  const env = process.env.NODE_ENV || 'development';
+  console.log(`🚀 Server running on port ${PORT} (${env})`);
+  console.log(`📧 Email configured for: ${process.env.EMAIL_USER || 'NOT SET'}`);
+  console.log(`🌐 Server ready to accept requests`);
+});
 

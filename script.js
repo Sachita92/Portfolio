@@ -17,13 +17,15 @@ reveal(); // Call on page load
 
 // Header scroll effect
 const header = document.getElementById('header');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
-    }
-});
+if (header) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+}
 
 // Mobile Navigation Toggle
 const burger = document.querySelector('.burger');
@@ -116,21 +118,23 @@ projectCards.forEach((card, index) => {
 
 // Skill bars animation
 const skillItems = document.querySelectorAll('.skill-item');
-const observerOptions = {
-    threshold: 0.5,
-    rootMargin: '0px 0px -100px 0px'
-};
+if (skillItems.length > 0) {
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px 0px -100px 0px'
+    };
 
-const skillObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
-            skillObserver.unobserve(entry.target); // Only animate once
-        }
-    });
-}, observerOptions);
+    const skillObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                skillObserver.unobserve(entry.target); // Only animate once
+            }
+        });
+    }, observerOptions);
 
-skillItems.forEach(item => skillObserver.observe(item));
+    skillItems.forEach(item => skillObserver.observe(item));
+}
 
 // Back to top button
 const backToTop = document.querySelector('.back-to-top');
@@ -184,7 +188,18 @@ if (contactForm) {
                 body: JSON.stringify(formData)
             });
             
-            const result = await response.json();
+            // Check if response is ok and is JSON
+            let result;
+            const contentType = response.headers.get('content-type');
+            
+            if (contentType && contentType.includes('application/json')) {
+                result = await response.json();
+            } else {
+                // If not JSON, get text response
+                const text = await response.text();
+                console.error('Non-JSON response:', text);
+                throw new Error('Server returned an invalid response');
+            }
             
             if (response.ok && result.success) {
                 // Success
@@ -209,7 +224,17 @@ if (contactForm) {
             }
         } catch (error) {
             console.error('Error sending message:', error);
-            formStatus.textContent = 'Oops! Something went wrong. Please try again.';
+            
+            // More specific error messages
+            let errorMessage = 'Oops! Something went wrong. Please try again.';
+            
+            if (error.message && error.message.includes('fetch')) {
+                errorMessage = 'Unable to connect to server. Please check your connection or try again later.';
+            } else if (error.message && error.message.includes('JSON')) {
+                errorMessage = 'Server error. Please contact me directly at sachitasigdel0713@gmail.com';
+            }
+            
+            formStatus.textContent = errorMessage;
             formStatus.className = 'form-status show error';
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
