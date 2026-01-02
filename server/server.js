@@ -29,9 +29,14 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '..')));
 
-// Redirect HTTP to HTTPS in production
+// Log all requests for debugging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
+// Redirect HTTP to HTTPS in production (before API routes)
 app.use((req, res, next) => {
   if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !== 'https') {
     res.redirect(`https://${req.header('host')}${req.url}`);
@@ -40,9 +45,14 @@ app.use((req, res, next) => {
   }
 });
 
-// Root route
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../index.html'));
+// API Routes - MUST be defined BEFORE static file serving
+// Test API endpoint to verify server is running
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'API server is running!', 
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV || 'development'
+  });
 });
 
 // Contact form route
@@ -157,6 +167,14 @@ app.get('/api/projects', (req, res) => {
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Serve static files AFTER API routes
+app.use(express.static(path.join(__dirname, '..')));
+
+// Root route (fallback for SPA)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 // Start server
