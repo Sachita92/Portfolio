@@ -1,11 +1,27 @@
-require('dotenv').config();
-console.log('EMAIL_USER:', process.env.EMAIL_USER);
+// Load .env file from server folder
+const path = require('path');
+const fs = require('fs');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+
+// Debug: Check if .env file exists
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  console.log('✅ .env file found at:', envPath);
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  console.log('📄 .env file content (first 100 chars):', envContent.substring(0, 100));
+} else {
+  console.log('❌ .env file NOT found at:', envPath);
+  console.log('💡 Please create a .env file in the server folder with:');
+  console.log('   EMAIL_USER=your-email@gmail.com');
+  console.log('   EMAIL_PASS=your-app-password');
+}
+
+console.log('EMAIL_USER:', process.env.EMAIL_USER || 'undefined');
 console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? '***configured***' : 'NOT SET');
 
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -42,6 +58,19 @@ app.post('/api/contact', async (req, res) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ success: false, message: 'Please enter a valid email address' });
+    }
+
+    // Check if email credentials are configured
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || 
+        process.env.EMAIL_USER === 'your-email@gmail.com' || 
+        process.env.EMAIL_PASS === 'your-app-password') {
+      console.log('⚠️ Email credentials not configured. Form submission logged but not sent.');
+      // Return success but log that email wasn't sent
+      console.log('Contact Form Submission:', { name, email, subject, message });
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Message received! (Email service not configured - message logged to console)' 
+      });
     }
 
     const transporter = nodemailer.createTransport({
@@ -103,20 +132,20 @@ app.get('/api/projects', (req, res) => {
     },
     {
       id: 2,
-      title: "Task Manager App",
-      description: "A mobile application for managing daily tasks with reminder notifications.",
-      category: "app",
-      tags: ["React Native", "Firebase"],
-      imageUrl: "/images/projects/taskmanager.jpg",
-      liveUrl: "https://expo.dev/@sachita/taskmanager",
-      githubUrl: "https://github.com/Sachita98/taskmanager"
+      title: "PredictDuel",
+      description: "A social prediction market platform built on Solana blockchain, enabling users to create and participate in prediction markets with real-time data synchronization and on-chain transactions.",
+      category: "web",
+      tags: ["Solana", "React", "Next.js", "TypeScript", "Web3"],
+      imageUrl: "/images/projects/predictduel.jpg",
+      liveUrl: "https://predictduel-vxdh.vercel.app/",
+      githubUrl: "https://github.com/Sachita92/predictduel"
     },
     {
       id: 3,
       title: "AI Customer Support Chatbot",
       description: "An intelligent chatbot that handles customer inquiries using NLP.",
       category: "ai",
-      tags: ["Python", "NLP", "TensorFlow"],
+      tags: ["Python", "NLP"],
       imageUrl: "/images/projects/aichatbot.jpg",
       liveUrl: "https://huggingface.co/spaces/sachita/chatbot",
       githubUrl: "https://github.com/Sachita98/ai-chatbot"
@@ -130,14 +159,20 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Start servers
+// Start server
 if (process.env.NODE_ENV === 'production') {
   // Production: HTTPS server
   try {
+    const https = require('https');
+    const http = require('http');
+    const fs = require('fs');
+    
     const options = {
       key: fs.readFileSync('/etc/ssl/private/sachitasigdel.com.np.key'),
       cert: fs.readFileSync('/etc/ssl/certs/sachitasigdel.com.np.pem')
     };
+
+    const HTTPS_PORT = process.env.HTTPS_PORT || 443;
 
     https.createServer(options, app).listen(HTTPS_PORT, '0.0.0.0', () => {
       console.log(`🚀 HTTPS Server running on port ${HTTPS_PORT}`);
@@ -168,3 +203,4 @@ if (process.env.NODE_ENV === 'production') {
     console.log(`Email configured for: ${process.env.EMAIL_USER}`);
   });
 }
+

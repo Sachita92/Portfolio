@@ -20,7 +20,7 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
 }
 
 body {
@@ -640,67 +640,57 @@ nav {
 
 .skills-content {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 60px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
 }
 
-.skill-category h3 {
-    font-size: 1.6rem;
-    margin-bottom: 30px;
-    font-weight: 700;
-}
-
-.skill-items {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-.skill-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.skill-info h4 {
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.skill-info span {
-    color: var(--text-light);
-}
-
-.skill-bar {
-    height: 10px;
-    background-color: #e9ecef;
-    border-radius: 10px;
+.skill-box {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(99, 102, 241, 0.05));
+    border: 2px solid rgba(124, 58, 237, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    transition: all 0.3s ease;
+    position: relative;
     overflow: hidden;
-    position: relative;
 }
 
-.skill-progress {
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary-color), #7C3AED);
-    border-radius: 10px;
-    position: relative;
-    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 0;
-}
-
-.skill-progress::after {
+.skill-box::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: shimmer 2s infinite;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), #7C3AED);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
 }
 
-.skill-item.animate .skill-progress {
-    width: var(--progress-width);
+.skill-box:hover {
+    transform: translateY(-5px);
+    border-color: rgba(124, 58, 237, 0.3);
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15);
+}
+
+.skill-box:hover::before {
+    transform: scaleX(1);
+}
+
+.skill-box h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-dark);
+    line-height: 1.4;
+}
+
+.skill-box p {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    line-height: 1.6;
+    margin: 0;
 }
 
 /* Projects Section */
